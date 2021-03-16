@@ -19,7 +19,7 @@ const ProductSchema = new mongoose.Schema({
     photos: [{
       thumbnail_url: String,
       url: String
-    }]
+    }],
     skus: [{
       stock_id: Number,
       quantity: Number,
