@@ -82,3 +82,11 @@ CREATE TABLE ProductStock (
   PRIMARY KEY(stockID),
   FOREIGN KEY(stockID) REFERENCES ProductStyles(styleID)
 );
+
+CREATE TABLE RelatedItems (
+  ID
+    INT,
+  productID
+    INT,
+  FOREIGN KEY(ID) REFERENCES ProductInfo(productID);
+)
