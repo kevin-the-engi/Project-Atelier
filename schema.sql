@@ -4,89 +4,76 @@ CREATE DATABASE Products;
 
 USE Products;
 
-CREATE TABLE ProductList (
-  ID
-    INT AUTO_INCREMENT,
-  productID
-    INT,
-  PRIMARY KEY(ID),
-  FOREIGN KEY(ID) REFERENCES ProductInfo(productID)
-)
-
 CREATE TABLE ProductInfo (
   productID
     INT AUTO_INCREMENT,
   name
-    VARCHAR(20) NOT NULL DEFAULT '',
+    VARCHAR(100) NOT NULL,
   slogan
-    VARCHAR(100) NOT NULL DEFAULT '',
+    VARCHAR(100) NOT NULL,
   description
-    VARCHAR(255) NOT NULL DEFAULT '',
+    VARCHAR(255) NOT NULL,
   category
-    CHAR(20) NOT NULL DEFAULT '',
+    VARCHAR(100) NOT NULL,
+  default_price
+    DECIMAL NOT NULL,
   PRIMARY KEY(productID)
 );
+
+-- LOAD DATA LOCAL INFILE './database/product.csv' INTO TABLE ProductInfo FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
 CREATE TABLE ProductFeatures (
   featureID
     SMALLINT AUTO_INCREMENT,
-  feature
-    VARCHAR(20) NULL,
-  feature_value
-    VARCHAR(20) NULL,
   productID
     INT,
+  feature
+    VARCHAR(100),
+  feature_value
+    VARCHAR(100),
   PRIMARY KEY(featureID),
-  FOREIGN KEY(featureID) REFERENCES ProductInfo(productID)
+  FOREIGN KEY(productID) REFERENCES ProductInfo(productID)
 );
 
 CREATE TABLE ProductStyles (
   styleID
     SMALLINT AUTO_INCREMENT,
-  name
-    VARCHAR(20) NOT NULL DEFAULT '',
-  original_price
-    DECIMAL NOT NULL DEFAULT '99999.99',
-  sale_price
-    DECIMAL NOT NULL DEFAULT '99999.99',
-  default
-    BOOLEAN NOT NULL DEFAULT 'false',
   productID
     INT,
+  name
+    VARCHAR(100) NOT NULL,
+  sale_price
+    DECIMAL NOT NULL,
+  original_price
+    DECIMAL NOT NULL,
+  default_style
+    TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY(styleID),
-  FOREIGN KEY(styleID) REFERENCES ProductInfo(productID)
+  FOREIGN KEY(productID) REFERENCES ProductInfo(productID)
 );
 
 CREATE TABLE ProductPhotos (
   photoID
-    MEDIUMINT AUTO_INCREMENT,
-  thumbnail_url
-    VARCHAR(255) NULL,
-  url
-    VARCHAR(255) NULL,
+    INT AUTO_INCREMENT,
   styleID
-    INT,
+    SMALLINT,
+  thumbnail_url
+    VARCHAR(255),
+  url
+    VARCHAR(255),
   PRIMARY KEY(photoID),
-  FOREIGN KEY(photoID) REFERENCES ProductStyles(styleID)
+  FOREIGN KEY(styleID) REFERENCES ProductStyles(styleID)
 );
 
 CREATE TABLE ProductStock (
   stockID
-    INT AUTO_INCREMENT.
-  quantity
-    SMALLINT NOT NULL DEFAULT '0',
+    INT AUTO_INCREMENT,
+  styleID
+    SMALLINT,
   size
     ENUM('XS', 'S', 'M', 'L', 'XL', 'XXL'),
-  styleID
-    INT,
+  quantity
+    SMALLINT NOT NULL,
   PRIMARY KEY(stockID),
-  FOREIGN KEY(stockID) REFERENCES ProductStyles(styleID)
+  FOREIGN KEY(styleID) REFERENCES ProductStyles(styleID)
 );
-
-CREATE TABLE RelatedItems (
-  ID
-    INT,
-  productID
-    INT,
-  FOREIGN KEY(ID) REFERENCES ProductInfo(productID);
-)

@@ -1,0 +1,31 @@
+{
+  "name": "sdcProducts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./server",
+  "scripts": {
+    "start": "nodemon ./server",
+    "build": "mysql -u root < schema.sql",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevin-the-engi/sdcProducts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevin-the-engi/sdcProducts/issues"
+  },
+  "homepage": "https://github.com/kevin-the-engi/sdcProducts#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "i": "^0.3.6",
+    "jest": "^26.6.3",
+    "mongoose": "^5.12.0",
+    "mysql": "^2.18.1",
+    "npm": "^7.6.3",
+    "pg": "^8.5.1"
+  }
+}
