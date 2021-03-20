@@ -73,24 +73,37 @@ const getProductStyles = (req, res) => {
       let styles = [];
 
       productStyles.forEach(style => {
+        let set = {};
+
         promises.push(
           new Promise((resolve, reject) => {
             getProductPhotos(style.id, (err, photos) => {
               if (err) {
                 reject(err);
               } else {
-                let set = {
-                  style_id: style.id,
-                  name: style.name,
-                  original_price: style.original_price,
-                  sale_price: style.sale_price,
-                  "default?": Boolean(style.default),
-                  photos: JSON.parse(photos[0].photos)
-                }
-
-                styles.push(set);
+                set.style_id = style.id,
+                set.name = style.name,
+                set.original_price = style.original_price,
+                set.sale_price = style.sale_price,
+                set["default?"] = Boolean(style.default),
+                set.photos = JSON.parse(photos[0].photos),
+                // skus: JSON.parse(photos[0].skus)
+                // styles.push(set);
                 resolve(set);
               }
+            })
+          })
+          .then((set) => {
+            return new Promise((resolve, reject) => {
+              getProductStock(set.style_id, (err, stock) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  set.skus = JSON.parse(stock[0].skus);
+                  styles.push(set);
+                  resolve(set);
+                }
+              })
             })
           })
         )
@@ -99,7 +112,7 @@ const getProductStyles = (req, res) => {
       Promise.all(promises)
         .then(() => {
           const product = {
-            product: productID,
+            product_id: productID,
             results: styles
           }
           res.status(200).send(product);
@@ -113,21 +126,43 @@ const getProductStyles = (req, res) => {
 };
 
 const getProductPhotos = (styleID, callback) => {
-  // const query = `SELECT url, thumbnail_url FROM ProductPhotos WHERE style_id = ${styleID};`;
   const query = `SELECT JSON_ARRAYAGG(JSON_OBJECT("url", url, "thumbnail_url", thumbnail_url)) AS photos FROM ProductPhotos WHERE style_id=${styleID}`;
+  // const query =
+  //   `SELECT
+  //     JSON_OBJECTAGG(psk.id, JSON_OBJECT("quantity", psk.quantity, "size", psk.size)) AS skus,
+  //     JSON_ARRAYAGG(JSON_OBJECT("url", pp.url, "thumbnail_url", pp.thumbnail_url)) AS photos
+  //       FROM ProductStyles ps
+  //         INNER JOIN ProductPhotos pp
+  //           ON ps.id=pp.style_id
+  //         INNER JOIN ProductStock psk
+  //           ON ps.id=psk.style_id
+  //       WHERE psk.style_id=${styleID} AND pp.style_id=${styleID}
+  //       GROUP BY ps.id;`;
 
-  db.query(query, (err, productPhotos) => {
+  db.query(query, (err, photos) => {
     if (err) {
       callback('Error getting ProductPhotos', null)
     } else {
-      callback(null, productPhotos);
+      callback(null, photos);
     }
   })
 };
 
 const getProductStock = (styleID, callback) => {
+  const query =
+    `SELECT
+      JSON_OBJECTAGG(id, JSON_OBJECT("quantity", quantity, "size", size)) AS skus
+        FROM ProductStock
+        WHERE style_id=${styleID};`;
 
-};
+  db.query(query, (err, stock) => {
+    if (err) {
+      callback('Error getting ProductStock', null);
+    } else {
+      callback(null, stock);
+    }
+  })
+}
 
 module.exports = {
   getProduct,
