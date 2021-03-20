@@ -1,3 +1,4 @@
+const Promise = require('bluebird');
 const db = require('../../database');
 
 const getProduct = (req, res) => {
@@ -31,10 +32,11 @@ const getProduct = (req, res) => {
 };
 
 const getProductFeatures = (productID, callback) => {
-  // const query =
-  //   `SELECT feature, feature_value
-  //     FROM ProductFeatures
-  //     WHERE product_id=${productID};`;
+  const query =
+    `SELECT feature, feature_value
+      FROM ProductFeatures
+      WHERE product_id=${productID};`;
+
   db.query(query, (err, productFeatures) => {
     if (err) {
       callback('Error getting ProductFeatures', null);
@@ -67,76 +69,52 @@ const getProductStyles = (req, res) => {
       console.log('Error getting ProductStyles');
       res.sendStatus(404);
     } else {
-      // console.log(productStyles)
+      let promises = [];
+      let styles = [];
 
-      new Promise((res, rej) => {
-        let styles = productStyles.map(style => {
-          let set = {
-            style_id: style.id,
-            name: style.name,
-            original_price: style.original_price,
-            sale_price: style.sale_price,
-            "default?": Boolean(style.default),
-            photos: []
-          }
-
+      productStyles.forEach(style => {
+        promises.push(
           new Promise((resolve, reject) => {
-            getProductPhotos(set.style_id, (err, photos) => {
+            getProductPhotos(style.id, (err, photos) => {
               if (err) {
-                // console.log(err);
                 reject(err);
               } else {
-                // console.log(photos);
-                // resolve(photos);
-                // console.log(set)
-                resolve(photos);
+                let set = {
+                  style_id: style.id,
+                  name: style.name,
+                  original_price: style.original_price,
+                  sale_price: style.sale_price,
+                  "default?": Boolean(style.default),
+                  photos: JSON.parse(photos[0].photos)
+                }
 
-                // resolve(photos);
+                styles.push(set);
+                resolve(set);
               }
-            });
-
-          })
-          .then((photos) => {
-            let items = photos.map(photo => {
-              return {
-                url: photo.url,
-                thumbnail_url: photo.thumbnail_url
-              }
-
             })
-            set.photos = items;
-            // console.log(set)
           })
-          .catch(err => {
-            console.log(err)
-          })
-
-          return set;
-        })
-        res(styles);
-      }).then((styles) => {
-        // let photoSets = photos;
-        // photoSets.push(photos);
-        console.log(styles);
-        // var test = [];
-        // test.push(styles);
-
-        // console.log(test);
-      // console.log(photos);
-        // console.log(styles);
-
-        // console.log(photoSets);
-        // set.photos = photoSets;
-        // return set;
+        )
       })
-      res.sendStatus(200);
-      // res.status(200).send(styles);
+
+      Promise.all(promises)
+        .then(() => {
+          const product = {
+            product: productID,
+            results: styles
+          }
+          res.status(200).send(product);
+        })
+        .catch((err) => {
+          console.log(err);
+          res.sendStatus(500);
+        });
     }
   })
 };
 
 const getProductPhotos = (styleID, callback) => {
-  const query = `SELECT url, thumbnail_url FROM ProductPhotos WHERE style_id = ${styleID};`;
+  // const query = `SELECT url, thumbnail_url FROM ProductPhotos WHERE style_id = ${styleID};`;
+  const query = `SELECT JSON_ARRAYAGG(JSON_OBJECT("url", url, "thumbnail_url", thumbnail_url)) AS photos FROM ProductPhotos WHERE style_id=${styleID}`;
 
   db.query(query, (err, productPhotos) => {
     if (err) {
