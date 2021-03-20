@@ -1,5 +1,6 @@
 const mysql = require('mysql');
-const { Pool, Client } = require('pg');
+// const styles = require('./styles.csv');
+// const { Pool, Client } = require('pg');
 
 // const db = new Client({
 //   host: 'localhost',
@@ -23,16 +24,6 @@ db.connect((err) => {
   }
 })
 
-// const productCSV =
-//   `LOAD DATA LOCAL INFILE '\\product.csv' INTO TABLE ProductInfo FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;`
-
-// db.query(productCSV, (err) => {
-//   if (err) {
-//     console.log('Error loading data', err);
-//   } else {
-//     console.log('Loading data successful')
-//   }
-// })
 // db.query("SET search_path TO 'DOCUMENT';")
 
 // id, name, slogan, description, category, default_price

@@ -5,7 +5,8 @@
   "main": "./server",
   "scripts": {
     "start": "nodemon ./server",
-    "build": "mysql -u root < schema.sql",
+    "build": "mysql -u root < ./database/schema.sql",
+    "load": "mysql -u root < ./database/load.sql",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +21,8 @@
   },
   "homepage": "https://github.com/kevin-the-engi/sdcProducts#readme",
   "dependencies": {
+    "csv": "^5.4.0",
+    "csv-parser": "^3.0.0",
     "express": "^4.17.1",
     "i": "^0.3.6",
     "jest": "^26.6.3",
