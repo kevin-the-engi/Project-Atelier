@@ -23,7 +23,8 @@ const getProduct = (req, res) => {
           console.log(err);
           res.sendStatus(500);
         } else {
-          product.features = features
+          product.default_price = product.default_price !== null ? product.default_price.toString() : '0';
+          product.features = JSON.parse(features[0].features);
           res.status(200).send(product);
         }
       })
@@ -33,24 +34,16 @@ const getProduct = (req, res) => {
 
 const getProductFeatures = (productID, callback) => {
   const query =
-    `SELECT feature, feature_value
-      FROM ProductFeatures
-      WHERE product_id=${productID};`;
+    `SELECT
+      JSON_ARRAYAGG(JSON_OBJECT("feature", feature, "value", feature_value)) AS features
+        FROM ProductFeatures
+        WHERE product_id=${productID};`;
 
   db.query(query, (err, productFeatures) => {
     if (err) {
       callback('Error getting ProductFeatures', null);
     } else {
-      let features = productFeatures.map(feature => {
-        let set = {
-          feature: feature.feature,
-          value: feature.feature_value
-        }
-
-        return set;
-      })
-
-      callback(null, features);
+      callback(null, productFeatures);
     }
   })
 };
@@ -83,8 +76,8 @@ const getProductStyles = (req, res) => {
               } else {
                 set.style_id = style.id,
                 set.name = style.name,
-                set.original_price = style.original_price,
-                set.sale_price = style.sale_price,
+                set.original_price = style.original_price.toString(),
+                set.sale_price = style.sale_price !== null ? style.sale_price.toString() : '0',
                 set["default?"] = Boolean(style.default),
                 set.photos = JSON.parse(photos[0].photos),
                 // skus: JSON.parse(photos[0].skus)
