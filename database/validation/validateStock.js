@@ -1,10 +1,10 @@
 const fs = require('fs');
 const readline = require('readline');
 const validate = require('./validationFunctions');
-const styles = require('./validateStyles')
+const styles = require('./data/validateStyles')
 
-const readStock = fs.createReadStream('./skus.csv', "utf8");
-const writeStock = fs.createWriteStream('./skus_clean.csv');
+const readStock = fs.createReadStream('../data/skus.csv', "utf8");
+const writeStock = fs.createWriteStream('../data/skus_clean.csv');
 
 readline.createInterface({
   input: readStock,

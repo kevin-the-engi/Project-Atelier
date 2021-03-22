@@ -1,4 +1,6 @@
 const mysql = require('mysql');
+const config = require('./config.js');
+// const database = require('./database.js');
 // const styles = require('./styles.csv');
 // const { Pool, Client } = require('pg');
 
@@ -9,12 +11,7 @@ const mysql = require('mysql');
 //   database: 'products'
 // })
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'Products'
-})
+const db = mysql.createConnection(config)
 
 db.connect((err) => {
   if (err) {

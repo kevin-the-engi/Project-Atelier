@@ -1,4 +1,3 @@
-const Promise = require('bluebird');
 const db = require('../../database');
 
 const getProduct = (req, res) => {

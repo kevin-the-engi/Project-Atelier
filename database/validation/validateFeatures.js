@@ -1,10 +1,10 @@
 const fs = require('fs');
 const readline = require('readline');
 const validate = require('./validationFunctions');
-const products = require('./validateProducts');
+const products = require('../data/validateProducts');
 
-const readFeatures = fs.createReadStream('./features.csv', "utf8");
-const writeFeatures = fs.createWriteStream('./features_clean.csv');
+const readFeatures = fs.createReadStream('../data/features.csv', "utf8");
+const writeFeatures = fs.createWriteStream('../data/features_clean.csv');
 
 readline.createInterface({
   input: readFeatures,

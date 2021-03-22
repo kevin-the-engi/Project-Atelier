@@ -1,9 +1,9 @@
 const fs = require('fs');
 const readline = require('readline');
-const validate = require('./validationFunctions');
+const validate = require('./data/validationFunctions');
 
-const readProduct = fs.createReadStream('./product.csv', "utf8");
-const writeProduct = fs.createWriteStream('./product_clean.csv');
+const readProduct = fs.createReadStream('../data/product.csv', "utf8");
+const writeProduct = fs.createWriteStream('../data/product_clean.csv');
 const productSet = new Set();
 
 readline.createInterface({

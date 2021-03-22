@@ -1,10 +1,10 @@
 const fs = require('fs');
 const readline = require('readline');
 const validate = require('./validationFunctions');
-const styles = require('./validateStyles');
+const styles = require('../data/validateStyles');
 
-const readPhotos = fs.createReadStream('./photos.csv', "utf8");
-const writePhotos = fs.createWriteStream('./photos_clean.csv');
+const readPhotos = fs.createReadStream('../data/photos.csv', "utf8");
+const writePhotos = fs.createWriteStream('../data/photos_clean.csv');
 
 let id = 0;
 
