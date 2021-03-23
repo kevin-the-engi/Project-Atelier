@@ -39,9 +39,7 @@ describe('Database', () => {
 describe('ProductInfo query', () => {
   // db.connect();
 
-  afterAll(() => {
-    db.end();
-  })
+
 
   it('should have columns for id, name, slogan, description, category, and default_price', (done) => {
     db.query('SHOW COLUMNS FROM ProductInfo;', (err, data) => {
@@ -59,8 +57,27 @@ describe('ProductInfo query', () => {
       }
     });
   });
+})
 
-  // it('should query the appropriate data for ProductInfo', () => {
-  //   db.query
-  // })
+describe('ProductFeatures query', () => {
+  afterAll(() => {
+    db.end();
+  })
+
+  it('should have columns for id, product_id, feature, feature_value', (done) => {
+    db.query('SHOW COLUMNS FROM ProductFeatures;', (err, data) => {
+      try {
+        data = JSON.parse(JSON.stringify(data));
+        const fields = ['id', 'product_id', 'feature', 'feature_value'];
+        const dataFields = data.map(column => fields.includes(column.Field));
+        const fieldsExist = dataFields.every(field => field === true);
+
+        expect(data.length).toBe(4);
+        expect(fieldsExist).toBe(true);
+        done();
+      } catch (err) {
+        done(err)
+      }
+    });
+  });
 })
