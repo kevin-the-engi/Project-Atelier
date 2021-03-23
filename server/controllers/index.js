@@ -1,5 +1,22 @@
 const db = require('../../database');
 
+const getProductList = (req, res) => {
+  let count = req.query.count || 5;
+  let page = req.query.page || 1;
+  const total = count * page + 1;
+  const query = `SELECT * FROM ProductInfo WHERE id < ${total};`;
+
+  db.query(query, (err, products) => {
+    if (err) {
+      console.log('Error getting Products');
+      res.sendStatus(404);
+    } else {
+      res.status(200).send(products);
+    }
+  })
+
+};
+
 const getProduct = (req, res) => {
   const productID = req.params.product_id;
   const query = `SELECT * FROM ProductInfo WHERE id=${productID};`;
@@ -157,6 +174,7 @@ const getProductStock = (styleID, callback) => {
 }
 
 module.exports = {
+  getProductList,
   getProduct,
   getProductStyles
 }
