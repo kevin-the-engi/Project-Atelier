@@ -12,8 +12,14 @@ Services Notes
 # Node Modules
 node_modules/
 
+# PEM Key
+*.pem
+
 # CSV
 *.csv
+
+# Data folder
+data/
 
 # Journal
 Journal

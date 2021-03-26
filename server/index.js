@@ -1,6 +1,6 @@
 const express = require('express');
 const routes = require('./routes');
-// const server = require('./server.js');
+const relic = require('newrelic');
 
 const app = express();
 const PORT = 3000;

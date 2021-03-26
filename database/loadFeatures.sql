@@ -1,0 +1,3 @@
+USE Products;
+
+LOAD DATA LOCAL INFILE './database/features.csv' INTO TABLE ProductFeatures FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';

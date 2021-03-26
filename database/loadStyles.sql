@@ -1,0 +1,3 @@
+USE Products;
+
+LOAD DATA LOCAL INFILE './database/styles.csv' INTO TABLE ProductStyles FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';

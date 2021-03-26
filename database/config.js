@@ -1,6 +1,7 @@
 module.exports = {
-  host: 'localhost',
+  host: process.env.DATABASE_HOST || 'localhost',
   user: 'root',
   password: '',
-  database: 'Products'
+  database: 'Products',
+  insecureAuth : true
 };

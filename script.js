@@ -7,23 +7,16 @@ export let options = {
   thresholds: {
     http_req_failed: ['rate<0.01'],
     http_req_duration:['p(100)<2000']
-  }
+  },
+  stages: [
+    { duration: '60s', target: 1000 },
+    { duration: '180s', target: 1000 },
+    { duration: '60s', target: 0 },
+  ],
 }
 
 export default function () {
-  group('Public endpoints', () => {
-    let responses = http.batch([
-      [
-        'GET',
-        `${localhost}/products/1`
-      ],
-      [
-        'GET',
-        `${localhost}/products/1/styles`
-      ],
-    ])
-  })
-  // let response = http.get('http://127.0.0.1:3000/products/1/');
+  let response = http.get('http://127.0.0.1:3000/products/');
 
   // check(response, {
   //   'is status 200': (res) => r.status === 200
@@ -31,9 +24,3 @@ export default function () {
 
   sleep(1);
 };
-//   return res.body;
-// }
-
-// export default function (data) {
-//   console.log(JSON.stringify(JSON.parse(data),null,2));
-// }
