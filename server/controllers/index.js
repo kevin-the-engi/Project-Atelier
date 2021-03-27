@@ -8,7 +8,7 @@ const getProductList = (req, res) => {
 
   db.query(query, (err, products) => {
     if (err) {
-      console.log('Error getting Products');
+      // console.log('Error getting Products');
       res.sendStatus(404);
     } else {
       res.status(200).send(products);
@@ -75,7 +75,7 @@ const getProductStyles = (req, res) => {
 
   db.query(query, (err, productStyles) => {
     if (err) {
-      console.log('Error getting ProductStyles');
+      // console.log('Error getting ProductStyles');
       res.sendStatus(404);
     } else {
       let promises = [];

@@ -1,7 +1,7 @@
 import http from 'k6/http';
 import { check, group, sleep } from 'k6';
 
-const localhost = 'http://127.0.0.1:3000';
+const localhost = 'http://ec2-3-101-110-210.us-west-1.compute.amazonaws.com';
 
 export let options = {
   thresholds: {
@@ -16,7 +16,7 @@ export let options = {
 }
 
 export default function () {
-  let response = http.get('http://127.0.0.1:3000/products/');
+  let response = http.get(localhost + '/products/');
 
   // check(response, {
   //   'is status 200': (res) => r.status === 200
