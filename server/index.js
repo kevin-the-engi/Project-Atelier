@@ -8,8 +8,8 @@ const PORT = 3000;
 app.use(express.json());
 app.use('/products', routes);
 
-app.use('/loaderio-23175e7a39397cbdad1603ba4f8c4046/', (req, res) => {
-  res.status(200).send('loaderio-23175e7a39397cbdad1603ba4f8c4046');
+app.use('/loaderio-99c49da8a94b9cc738d8ae83b7959498', (req, res) => {
+  res.status(200).send('loaderio-99c49da8a94b9cc738d8ae83b7959498');
 });
 
 
